@@ -1,0 +1,19 @@
+{
+  "name": "social-media-api",
+  "version": "1.0.0",
+  "description": "An api for that uses mongo db, express, nodemon, and day js for a ficticious social media website to handle large amounts of unstructured data.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "Christian B. Martinez",
+  "license": "ISC",
+  "dependencies": {
+    "dayjs": "^1.11.9",
+    "express": "^4.18.2",
+    "mongoose": "^7.4.3",
+    "nodemon": "^3.0.1"
+  }
+}
