@@ -1,7 +1,8 @@
 const router = require('express').Router()
+const usersRoutes = require('./users-routes')
+const thoughtsRoutes = require('./thoughts-routes')
 
-router.use((req, res) => {
-  res.status(404).json({ error: 'Route not found' })
-})
+router.use('/users', usersRoutes)
+router.use('/thoughts', thoughtsRoutes)
 
 module.exports = router

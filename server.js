@@ -1,6 +1,6 @@
 const express = require('express')
-const db = require('./db/connection')
-const routes = require('./routes/index.js')
+const db = require('./db')
+const routes = require('./routes')
 
 const PORT = 3001
 const app = express()
