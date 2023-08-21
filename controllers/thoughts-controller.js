@@ -14,10 +14,12 @@ const thoughtsController = {
   },
   createThought(req, res) {
     const { username, thoughtText } = req.body
+
     const payload = {
       username: username,
       thoughtText: thoughtText,
     }
+
     Thought.create(payload)
       .then((thought) =>
         res.status(200).json({
