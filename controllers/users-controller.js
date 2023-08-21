@@ -9,21 +9,27 @@ const usersController = {
       .catch((err) => res.status(400).json(err))
   },
   createUser(req, res) {
-    const { username, email } = req.body
+    try {
+      const { username, email } = req.body
 
-    const payload = {
-      username: username,
-      email: email,
-    }
+      const payload = {
+        username: username,
+        email: email,
+      }
 
-    User.create(payload)
-      .then((user) =>
+      User.create(payload).then((user) => {
         res.status(200).json({
           success: true,
+          message: `User ${username} has been created!`,
           data: user,
         })
-      )
-      .catch((err) => res.status(400).json({ success: false, error: err }))
+      })
+    } catch (err) {
+      res.status(400).json({
+        success: false,
+        error: err ? err : 'Something went wrong while creating the user!',
+      })
+    }
   },
 }
 

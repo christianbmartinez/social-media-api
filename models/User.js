@@ -41,7 +41,18 @@ const UserSchema = new Schema(
   }
 )
 
-UserSchema.virtual('friendCount').get(() => this.friends.length)
+UserSchema.virtual('friendCount').get(async () => {
+  try {
+    const friends = await this.friends
+    if (friends) {
+      return friends.length
+    } else {
+      return
+    }
+  } catch (err) {
+    console.log(err)
+  }
+})
 
 const User = model('User', UserSchema)
 

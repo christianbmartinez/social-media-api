@@ -60,7 +60,18 @@ const ThoughtSchema = new Schema(
   }
 )
 
-ThoughtSchema.virtual('reactionCount').get(() => this.reactions.length)
+ThoughtSchema.virtual('reactionCount').get(async () => {
+  try {
+    const reactions = await this.reactions
+    if (reactions) {
+      return reactions.length
+    } else {
+      return
+    }
+  } catch (err) {
+    console.log(err)
+  }
+})
 
 const Thought = model('Thought', ThoughtSchema)
 

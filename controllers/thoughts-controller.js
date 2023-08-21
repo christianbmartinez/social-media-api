@@ -13,21 +13,27 @@ const thoughtsController = {
       .catch((err) => res.status(400).json(err))
   },
   createThought(req, res) {
-    const { username, thoughtText } = req.body
+    try {
+      const { username, thoughtText } = req.body
 
-    const payload = {
-      username: username,
-      thoughtText: thoughtText,
-    }
+      const payload = {
+        username: username,
+        thoughtText: thoughtText,
+      }
 
-    Thought.create(payload)
-      .then((thought) =>
+      Thought.create(payload).then((thought) => {
         res.status(200).json({
           success: true,
+          message: `Thought "${thoughtText}" has been created!`,
           data: thought,
         })
-      )
-      .catch((err) => res.status(400).json({ success: false, error: err }))
+      })
+    } catch (err) {
+      res.status(400).json({
+        success: false,
+        error: err ? err : 'Something went wrong while creating the thought!',
+      })
+    }
   },
 }
 
