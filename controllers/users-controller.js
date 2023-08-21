@@ -2,11 +2,22 @@ const { User } = require('../models')
 
 const usersController = {
   getUsers(req, res) {
-    User.find({})
-      .select('-__v')
-      .sort({ _id: -1 })
-      .then((users) => res.status(200).json(users))
-      .catch((err) => res.status(400).json(err))
+    try {
+      User.find({})
+        .select('-__v')
+        .sort({ _id: -1 })
+        .then((users) => {
+          res.status(200).json({
+            success: true,
+            data: users,
+          })
+        })
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        error: err ? err : 'Something went wrong while fetching users!',
+      })
+    }
   },
   createUser(req, res) {
     try {
@@ -20,7 +31,6 @@ const usersController = {
       User.create(payload).then((user) => {
         res.status(200).json({
           success: true,
-          message: `User ${username} has been created!`,
           data: user,
         })
       })

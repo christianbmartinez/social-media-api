@@ -24,7 +24,6 @@ const thoughtsController = {
       Thought.create(payload).then((thought) => {
         res.status(200).json({
           success: true,
-          message: `Thought "${thoughtText}" has been created!`,
           data: thought,
         })
       })
