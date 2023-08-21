@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose')
-const dayjs = require('dayjs')
+const moment = require('moment')
 
 const UserSchema = new Schema(
   {
@@ -17,8 +17,9 @@ const UserSchema = new Schema(
     },
     createdAt: {
       type: Date,
-      default: Date.now(),
-      get: (date) => dayjs(date).format('MM/DD/YYYY'),
+      default: Date.now,
+      get: (timestamp) =>
+        moment(timestamp).format('MMMM Do YYYY [at] h:mm:ss a'),
     },
     thoughts: [
       {
