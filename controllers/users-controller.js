@@ -24,12 +24,10 @@ const usersController = {
   createUser(req, res) {
     try {
       const { username, email } = req.body
-
       const payload = {
         username: username,
         email: email,
       }
-
       User.create(payload).then((user) => {
         res.status(200).json({
           success: true,
@@ -69,6 +67,34 @@ const usersController = {
       res.status(400).json({
         success: false,
         error: err ? err : 'Something went wrong while finding the user!',
+      })
+    }
+  },
+  // Update a users username and email by id
+  updateUser(req, res) {
+    try {
+      const { id } = req.params
+      const { username, email } = req.body
+      User.findOneAndUpdate(
+        { _id: id },
+        { username: username, email: email },
+        {
+          new: true,
+          runValidators: true,
+        }
+      ).then((user) => {
+        if (!user) {
+          res
+            .status(404)
+            .json({ success: false, message: 'No user found with that id!' })
+        } else {
+          res.status(200).json({ success: true, data: user })
+        }
+      })
+    } catch (err) {
+      res.status(400).json({
+        success: false,
+        error: err ? err : 'Something went wrong while updating the user!',
       })
     }
   },
