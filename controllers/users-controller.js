@@ -119,6 +119,7 @@ const usersController = {
       })
     }
   },
+  // Add a friend by id
   addFriend(req, res) {
     try {
       const { id, friendId } = req.params
@@ -142,6 +143,7 @@ const usersController = {
       })
     }
   },
+  // Delete a friend by id
   deleteFriend(req, res) {
     try {
       const { id, friendId } = req.params

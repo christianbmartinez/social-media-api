@@ -48,6 +48,27 @@ const thoughtsController = {
       })
     }
   },
+  // Get a thought by id
+  getThoughtById(req, res) {
+    try {
+      const { id } = req.params
+      Thought.find({ _id: id }).then((thought) => {
+        if (!thought) {
+          res.status(404).json({
+            success: false,
+            message: 'No thought found with that id!',
+          })
+        } else {
+          res.status(200).json({ success: true, data: thought })
+        }
+      })
+    } catch (err) {
+      res.status(400).json({
+        success: false,
+        error: err ? err : 'Something went wrong while finding the thought!',
+      })
+    }
+  },
 }
 
 module.exports = thoughtsController
