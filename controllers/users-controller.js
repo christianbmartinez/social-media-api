@@ -98,7 +98,7 @@ const usersController = {
       })
     }
   },
-  // Delete a user
+  // Delete a user by id
   deleteUser(req, res) {
     try {
       const { id } = req.params

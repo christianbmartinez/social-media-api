@@ -1,6 +1,7 @@
-const { Thought } = require('../models')
+const { Thought, User } = require('../models')
 
 const thoughtsController = {
+  // Get all thoughts
   getThoughts(req, res) {
     try {
       Thought.find({})
@@ -19,19 +20,25 @@ const thoughtsController = {
       })
     }
   },
+  // Create a thought
   createThought(req, res) {
     try {
-      const { username, thoughtText } = req.body
-
+      const { username, thoughtText, userId } = req.body
       const payload = {
         username: username,
         thoughtText: thoughtText,
       }
-
-      Thought.create(payload).then((thought) => {
-        res.status(200).json({
-          success: true,
-          data: thought,
+      Thought.create(payload).then(async (thought) => {
+        return await User.findOneAndUpdate(
+          { _id: userId },
+          { $push: { thoughts: { _id: thought._id } } },
+          { new: true }
+        ).then((user) => {
+          if (!user) {
+            res.status(404).json({ message: 'No user found with that userId!' })
+          } else {
+            res.status(200).json({ success: true, data: user })
+          }
         })
       })
     } catch (err) {
