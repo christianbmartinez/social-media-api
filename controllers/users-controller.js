@@ -161,7 +161,7 @@ const usersController = {
     } catch (err) {
       res.status(400).json({
         success: false,
-        error: err ? err : 'Something went wrong while removing a friend!',
+        error: err ? err : 'Something went wrong while deleting a friend!',
       })
     }
   },
