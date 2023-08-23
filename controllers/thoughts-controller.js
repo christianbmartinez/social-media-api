@@ -69,6 +69,33 @@ const thoughtsController = {
       })
     }
   },
+  // Update a thought by id
+  updateThought(req, res) {
+    try {
+      const { thoughtText, username, thoughtId } = req.body
+      Thought.findOneAndUpdate(
+        { _id: thoughtId },
+        { username: username, thoughtText: thoughtText },
+        {
+          new: true,
+          runValidators: true,
+        }
+      ).then((thought) => {
+        if (!thought) {
+          res
+            .status(404)
+            .json({ success: false, message: 'No thought found with that id!' })
+        } else {
+          res.status(200).json({ success: true, data: thought })
+        }
+      })
+    } catch (err) {
+      res.status(400).json({
+        success: false,
+        error: err ? err : 'Something went wrong while updating the thought!',
+      })
+    }
+  },
 }
 
 module.exports = thoughtsController
