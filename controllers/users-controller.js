@@ -98,6 +98,27 @@ const usersController = {
       })
     }
   },
+  // Delete a user
+  deleteUser(req, res) {
+    try {
+      const { id } = req.params
+      User.findOneAndDelete({ _id: id }).then((user) => {
+        if (!user) {
+          res.status(404).json({
+            success: false,
+            message: 'No user found with that id!',
+          })
+        } else {
+          res.status(200).json({ success: true, data: user })
+        }
+      })
+    } catch (err) {
+      res.status(400).json({
+        success: false,
+        error: err ? err : 'Something went wrong while deleting the user!',
+      })
+    }
+  },
 }
 
 module.exports = usersController
