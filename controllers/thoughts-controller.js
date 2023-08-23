@@ -31,7 +31,7 @@ const thoughtsController = {
       Thought.create(payload).then(async (thought) => {
         return await User.findOneAndUpdate(
           { _id: userId },
-          { $push: { thoughts: { _id: thought._id } } },
+          { $push: { thoughts: thought._id } },
           { new: true }
         ).then((user) => {
           if (!user) {
