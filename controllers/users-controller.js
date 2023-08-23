@@ -119,6 +119,29 @@ const usersController = {
       })
     }
   },
+  addFriend(req, res) {
+    try {
+      const { id, friendId } = req.params
+      User.findOneAndUpdate(
+        { _id: id },
+        { $push: { friends: friendId } },
+        { new: true }
+      ).then((user) => {
+        if (!user) {
+          res
+            .status(404)
+            .json({ success: false, message: 'No user found with that id!' })
+        } else {
+          res.status(200).json({ success: true, data: user })
+        }
+      })
+    } catch (err) {
+      res.status(400).json({
+        success: false,
+        error: err ? err : 'Something went wrong while adding a friend!',
+      })
+    }
+  },
 }
 
 module.exports = usersController
