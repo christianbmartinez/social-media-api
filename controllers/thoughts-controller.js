@@ -25,26 +25,39 @@ const thoughtsController = {
     }
   },
   // Create a thought
-  createThought(req, res) {
+  async createThought(req, res) {
     try {
       const { username, thoughtText, userId } = req.body
       const payload = {
         username: username,
         thoughtText: thoughtText,
       }
-      Thought.create(payload).then(async (thought) => {
-        return await User.findOneAndUpdate(
-          { _id: userId },
-          { $push: { thoughts: thought._id } },
-          { new: true }
-        ).then((user) => {
-          if (!user) {
-            res.status(404).json({ message: 'No user found with that userId!' })
-          } else {
-            res.status(200).json({ success: true, data: user })
-          }
-        })
+      const thoughtExists = await Thought.findOne({
+        thoughtText: thoughtText,
       })
+      if (thoughtExists) {
+        res.status(409).json({
+          success: false,
+          message:
+            'That thought already exists in our database! Please post a unique thought.',
+        })
+      } else {
+        Thought.create(payload).then(async (thought) => {
+          return await User.findOneAndUpdate(
+            { _id: userId },
+            { $push: { thoughts: thought._id } },
+            { new: true }
+          ).then((user) => {
+            if (!user) {
+              res
+                .status(404)
+                .json({ message: 'No user found with that userId!' })
+            } else {
+              res.status(200).json({ success: true, data: user })
+            }
+          })
+        })
+      }
     } catch (err) {
       res.status(400).json({
         success: false,
