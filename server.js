@@ -1,5 +1,6 @@
 const express = require('express')
 const db = require('./db')
+const { mw } = require('./middleware')
 const routes = require('./routes')
 
 const PORT = 3001
@@ -7,6 +8,7 @@ const app = express()
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+app.use(mw)
 app.use(routes)
 
 db.once('open', () => {

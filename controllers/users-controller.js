@@ -21,19 +21,30 @@ const usersController = {
     }
   },
   // Create a user
-  createUser(req, res) {
+  async createUser(req, res) {
     try {
       const { username, email } = req.body
       const payload = {
         username: username,
         email: email,
       }
-      User.create(payload).then((user) => {
-        res.status(200).json({
-          success: true,
-          data: user,
-        })
+      const userExists = await User.findOne({
+        username: username,
+        email: email,
       })
+      if (userExists) {
+        res.status(409).json({
+          success: false,
+          message: 'User already exists in our database!',
+        })
+      } else {
+        User.create(payload).then((user) => {
+          res.status(200).json({
+            success: true,
+            data: user,
+          })
+        })
+      }
     } catch (err) {
       res.status(400).json({
         success: false,

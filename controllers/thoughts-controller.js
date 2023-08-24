@@ -121,6 +121,7 @@ const thoughtsController = {
       })
     }
   },
+  // Create a reaction
   createReaction(req, res) {
     try {
       const { id } = req.params
@@ -146,6 +147,30 @@ const thoughtsController = {
       res.status(400).json({
         success: false,
         error: err ? err : 'Something went wrong while creating the reaction!',
+      })
+    }
+  },
+  // Delete a reaction
+  deleteReaction(req, res) {
+    try {
+      const { id, reactionId } = req.params
+      Thought.findOneAndUpdate(
+        { _id: id },
+        { $pull: { reactionId: reactionId } },
+        { new: true }
+      ).then((thought) => {
+        if (!thought) {
+          res
+            .status(404)
+            .json({ success: false, message: 'No thought found with that id!' })
+        } else {
+          res.status(200).json({ success: true, data: thought })
+        }
+      })
+    } catch (err) {
+      res.status(400).json({
+        success: false,
+        error: err ? err : 'Something went wrong while deleting the reaction!',
       })
     }
   },
