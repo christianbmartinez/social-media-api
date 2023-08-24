@@ -8,10 +8,14 @@ const thoughtsController = {
         .select('-__v')
         .sort({ _id: -1 })
         .then((thoughts) => {
-          res.status(200).json({
-            success: true,
-            data: thoughts,
-          })
+          if (!thoughts.length) {
+            res.status(404).json({ message: 'No thoughts found!' })
+          } else {
+            res.status(200).json({
+              success: true,
+              data: thoughts,
+            })
+          }
         })
     } catch (err) {
       res.status(400).json({
