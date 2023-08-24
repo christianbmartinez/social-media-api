@@ -121,6 +121,34 @@ const thoughtsController = {
       })
     }
   },
+  createReaction(req, res) {
+    try {
+      const { id } = req.params
+      const { username, reactionBody } = req.body
+      const payload = {
+        username: username,
+        reactionBody: reactionBody,
+      }
+      Thought.findOneAndUpdate(
+        { _id: id },
+        { $push: { reactions: payload } },
+        { new: true }
+      ).then((thought) => {
+        if (!thought) {
+          res
+            .status(404)
+            .json({ success: false, message: 'No thought found with that id!' })
+        } else {
+          res.status(200).json({ success: true, data: thought })
+        }
+      })
+    } catch (err) {
+      res.status(400).json({
+        success: false,
+        error: err ? err : 'Something went wrong while creating the reaction!',
+      })
+    }
+  },
 }
 
 module.exports = thoughtsController
