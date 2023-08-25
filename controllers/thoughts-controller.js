@@ -33,6 +33,7 @@ const thoughtsController = {
         thoughtText: thoughtText,
       }
       const thoughtExists = await Thought.findOne({
+        username: username,
         thoughtText: thoughtText,
       })
       if (thoughtExists) {

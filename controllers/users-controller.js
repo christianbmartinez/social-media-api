@@ -8,10 +8,17 @@ const usersController = {
         .select('-__v')
         .sort({ _id: -1 })
         .then((users) => {
-          res.status(200).json({
-            success: true,
-            data: users,
-          })
+          if (!users.length) {
+            res.status(404).json({
+              success: false,
+              message: 'No users found in our database!',
+            })
+          } else {
+            res.status(200).json({
+              success: true,
+              data: users,
+            })
+          }
         })
     } catch (err) {
       res.status(400).json({
@@ -109,22 +116,23 @@ const usersController = {
       })
     }
   },
-  // Delete a user by id
-  deleteUser(req, res) {
+  // Delete a user and users thoughts by id
+  async deleteUser(req, res) {
     try {
       const { id } = req.params
-      Thought.deleteMany({ _id: id }).then((data) => {
-        console.log('DELETED DATA: ', data)
-        User.findOneAndDelete({ _id: id }).then((user) => {
-          if (!user) {
-            res.status(404).json({
-              success: false,
-              message: 'No user found with that id!',
-            })
-          } else {
+      User.findOneAndDelete({ _id: id }).then((user) => {
+        if (!user) {
+          res.status(404).json({
+            success: false,
+            message: 'No user found with that id!',
+          })
+        } else {
+          Thought.deleteMany({
+            username: user.username,
+          }).then(() => {
             res.status(200).json({ success: true, data: user })
-          }
-        })
+          })
+        }
       })
     } catch (err) {
       res.status(400).json({
