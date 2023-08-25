@@ -166,7 +166,6 @@ const thoughtsController = {
   // Delete a reaction
   deleteReaction(req, res) {
     try {
-      console.log(id, reactionId)
       const { id, reactionId } = req.params
       Thought.findOneAndUpdate(
         { _id: id },
