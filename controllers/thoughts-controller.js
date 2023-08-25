@@ -166,12 +166,18 @@ const thoughtsController = {
   // Delete a reaction
   deleteReaction(req, res) {
     try {
+      console.log(id, reactionId)
       const { id, reactionId } = req.params
       Thought.findOneAndUpdate(
         { _id: id },
-        { $pull: { reactionId: reactionId } },
+        {
+          $pull: {
+            reactions: { reactionId: reactionId },
+          },
+        },
         { new: true }
       ).then((thought) => {
+        console.log(thought)
         if (!thought) {
           res
             .status(404)
@@ -181,6 +187,7 @@ const thoughtsController = {
         }
       })
     } catch (err) {
+      console.log(err)
       res.status(400).json({
         success: false,
         error: err ? err : 'Something went wrong while deleting the reaction!',

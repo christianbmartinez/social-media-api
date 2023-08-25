@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model, Types } = require('mongoose')
 const moment = require('moment')
 
 const UserSchema = new Schema(
@@ -43,17 +43,8 @@ const UserSchema = new Schema(
   }
 )
 
-UserSchema.virtual('friendCount').get(async () => {
-  try {
-    const friends = await this.friends
-    if (friends) {
-      return friends.length
-    } else {
-      return
-    }
-  } catch (err) {
-    console.log(err)
-  }
+UserSchema.virtual('friendCount').get(function () {
+  return this.friends.length
 })
 
 const User = model('User', UserSchema)
