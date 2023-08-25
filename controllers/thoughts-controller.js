@@ -176,7 +176,6 @@ const thoughtsController = {
         },
         { new: true }
       ).then((thought) => {
-        console.log(thought)
         if (!thought) {
           res
             .status(404)
